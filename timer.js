@@ -6,8 +6,8 @@ const refs = {
 };
 
 class CountdownTimer {
-  constructor(selector, targetDate) {
-    this.$el = document.querySelector(selector);
+  constructor({ selector, targetDate }) {
+    this.selector = document.querySelector(selector);
     this.targetDate = targetDate;
   }
 
@@ -29,6 +29,13 @@ class CountdownTimer {
     return String(value).padStart(2, "0");
   }
 
+  start() {
+    refs.days.textContent = "00";
+    refs.hours.textContent = "00";
+    refs.mins.textContent = "00";
+    refs.secs.textContent = "00";
+  }
+
   intervalId = setInterval(() => {
     const startTime = Date.now();
     const deltaTime = this.targetDate - startTime;
@@ -36,17 +43,12 @@ class CountdownTimer {
 
     if (deltaTime < 0) {
       clearInterval();
-      refs.days.textContent = "00";
-      refs.hours.textContent = "00";
-      refs.mins.textContent = "00";
-      refs.secs.textContent = "00";
+      this.start();
     }
   }, 1000);
 }
 
-new CountdownTimer(
-  ...Object.values({
-    selector: "#timer-1",
-    targetDate: new Date("May 30, 2021"),
-  })
-);
+new CountdownTimer({
+  selector: "#timer-1",
+  targetDate: new Date("May 31, 2021"),
+});

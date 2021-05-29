@@ -9,6 +9,7 @@ class CountdownTimer {
   constructor({ selector, targetDate }) {
     this.selector = document.querySelector(selector);
     this.targetDate = targetDate;
+    this.intervalId = null;
   }
 
   getTimeComponents(time) {
@@ -36,19 +37,27 @@ class CountdownTimer {
     refs.secs.textContent = "00";
   }
 
-  intervalId = setInterval(() => {
+  renderTimer() {
     const startTime = Date.now();
     const deltaTime = this.targetDate - startTime;
     this.getTimeComponents(deltaTime);
-
     if (deltaTime < 0) {
       clearInterval();
       this.start();
     }
-  }, 1000);
+  }
+
+  initTimer() {
+    this.renderTimer();
+    this.intervalId = setInterval(() => {
+      this.renderTimer();
+    }, 1000);
+  }
 }
 
-new CountdownTimer({
+const timer = new CountdownTimer({
   selector: "#timer-1",
   targetDate: new Date("May 31, 2021"),
 });
+
+timer.initTimer();
